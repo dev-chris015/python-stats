@@ -104,6 +104,7 @@ def apply_custom_style():
     Aplica configuraciones visuales homogéneas a Matplotlib y Seaborn
     para generar gráficos profesionales de alta calidad.
     """
+    # pyrefly: ignore [missing-import]
     import matplotlib.pyplot as plt
     import seaborn as sns
     
