@@ -1,0 +1,81 @@
+# ╔══════════════════════════════════════════════════════════════════════════════════╗
+# ║                   FICHA METODOLÓGICA DE LIMPIEZA Y PROCESAMIENTO                   ║
+# ╠══════════════════════════════════════════════════════════════════════════════════╣
+# ║  • Fecha de Ejecución:                           2026-08-23 01:13:43             ║
+# ║  • Dimensiones Iniciales (Features):             104234 filas x 88 cols          ║
+# ║  • Dimensiones Iniciales (Ground Truth):         104234 filas x 3 cols           ║
+# ║  • Dataset Fusionado (Inicial):                  104234 filas x 89 cols          ║
+# ║  • Dataset Fusionado (Final Limpio):             102771 filas x 88 cols          ║
+# ║  • Umbral de Alerta / Imputación:                2.0%                            ║
+# ║  • Umbral de Exclusión Crítica:                  10.0%                           ║
+# ║  • Variable(s) Excluidas (>10% NaNs):            sector1d                        ║
+# ╚══════════════════════════════════════════════════════════════════════════════════╝
+#
+# ┌──────────────────────────────────────────────────────────────────────────────────┐
+# │ TABLA 1: FRECUENCIAS ABSOLUTAS Y RELATIVAS POR PAÍS (SURVEY_ID)                  │
+# └──────────────────────────────────────────────────────────────────────────────────┘
+survey_id,frecuencia_absoluta,frecuencia_relativa_porcentaje
+100000,31750,30.89
+200000,34140,33.22
+300000,36881,35.89
+
+# ┌──────────────────────────────────────────────────────────────────────────────────┐
+# │ TABLA 2: CUANTIFICACIÓN DE VALORES FALTANTES Y EVALUACIÓN DE UMBRALES            │
+# └──────────────────────────────────────────────────────────────────────────────────┘
+variable,global_nan_pct,nan_pct_100000,nan_pct_200000,nan_pct_300000,estado
+sector1d,13.5551,13.213,13.8359,13.5898,Exclusión (>10%)
+dweltyp,1.157,1.193,1.1942,1.0918,Normal
+utl_exp_ppp17,0.0815,0.0,0.0,0.2269,Normal
+consumed5000,0.0633,0.0715,0.0231,0.0934,Normal
+consumed4600,0.0537,0.0652,0.0145,0.0801,Normal
+consumed4900,0.0537,0.0652,0.0145,0.0801,Normal
+consumed4800,0.0537,0.0652,0.0145,0.0801,Normal
+consumed4500,0.0518,0.0621,0.0145,0.0774,Normal
+consumed4400,0.0499,0.0621,0.0087,0.0774,Normal
+consumed4700,0.0499,0.0652,0.0116,0.0721,Normal
+consumed4300,0.0499,0.0652,0.0116,0.0721,Normal
+employed,0.0432,0.0497,0.0231,0.0561,Normal
+consumed4200,0.0422,0.0466,0.0087,0.0694,Normal
+consumed3900,0.0384,0.0466,0.0087,0.0587,Normal
+consumed4100,0.0384,0.0466,0.0116,0.0561,Normal
+consumed4000,0.0365,0.0435,0.0087,0.0561,Normal
+consumed3800,0.0336,0.0342,0.0087,0.0561,Normal
+consumed3700,0.0278,0.028,0.0116,0.0427,Normal
+consumed3500,0.023,0.0217,0.0087,0.0374,Normal
+consumed3600,0.0221,0.0186,0.0116,0.0347,Normal
+share_secondary,0.0221,0.0217,0.0318,0.0133,Normal
+educ_max,0.0221,0.0217,0.0318,0.0133,Normal
+consumed3400,0.0211,0.0186,0.0087,0.0347,Normal
+consumed3300,0.0192,0.0186,0.0058,0.032,Normal
+consumed3200,0.0144,0.0093,0.0029,0.0294,Normal
+consumed3100,0.0125,0.0124,0.0029,0.0214,Normal
+consumed3000,0.0096,0.0062,0.0029,0.0187,Normal
+consumed2600,0.0067,0.0031,0.0029,0.0133,Normal
+consumed2200,0.0067,0.0031,0.0058,0.0107,Normal
+consumed2900,0.0067,0.0062,0.0029,0.0107,Normal
+consumed1700,0.0048,0.0031,0.0,0.0107,Normal
+consumed1400,0.0048,0.0,0.0,0.0133,Normal
+consumed2800,0.0048,0.0031,0.0,0.0107,Normal
+consumed1300,0.0048,0.0031,0.0,0.0107,Normal
+consumed1200,0.0048,0.0031,0.0,0.0107,Normal
+consumed2500,0.0038,0.0,0.0,0.0107,Normal
+consumed1800,0.0038,0.0031,0.0,0.008,Normal
+consumed1000,0.0038,0.0,0.0,0.0107,Normal
+consumed1100,0.0038,0.0,0.0,0.0107,Normal
+consumed1600,0.0038,0.0031,0.0,0.008,Normal
+consumed2100,0.0038,0.0031,0.0029,0.0053,Normal
+consumed1900,0.0038,0.0,0.0,0.0107,Normal
+consumed2300,0.0029,0.0,0.0,0.008,Normal
+consumed1500,0.0029,0.0031,0.0,0.0053,Normal
+consumed2000,0.0029,0.0031,0.0,0.0053,Normal
+consumed100,0.0019,0.0,0.0029,0.0027,Normal
+consumed400,0.0019,0.0,0.0029,0.0027,Normal
+consumed200,0.0019,0.0,0.0029,0.0027,Normal
+consumed500,0.0019,0.0,0.0029,0.0027,Normal
+consumed300,0.0019,0.0,0.0029,0.0027,Normal
+consumed2700,0.0019,0.0,0.0,0.0053,Normal
+consumed700,0.0019,0.0031,0.0,0.0027,Normal
+consumed800,0.001,0.0,0.0,0.0027,Normal
+consumed600,0.001,0.0,0.0,0.0027,Normal
+consumed900,0.001,0.0,0.0,0.0027,Normal
+consumed2400,0.001,0.0,0.0,0.0027,Normal
