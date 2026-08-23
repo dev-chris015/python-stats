@@ -82,7 +82,7 @@ def main():
     # --------------------------------------------------------------------------
     # FIGURA OBLIGATORIA 1: Histograma de Distribución
     # --------------------------------------------------------------------------
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(11, 6.5))
     
     # Histograma con KDE para temperatura
     sns.histplot(
@@ -102,15 +102,15 @@ def main():
     ax.axvline(mean_temp, color="#d62728", linestyle="--", linewidth=2, label=f"Media ({mean_temp:.2f} °C)")
     ax.axvline(median_temp, color="#2ca02c", linestyle="-.", linewidth=2, label=f"Mediana ({median_temp:.2f} °C)")
     
-    ax.set_title("Figura 1: Distribución Regional de la Temperatura Media Mensual en Centroamérica (2020–2025)")
+    ax.set_title("Figura 1: Distribución Regional de la Temperatura Media Mensual\nen Centroamérica (2020–2025)", pad=15)
     ax.set_xlabel("Temperatura (°C)")
     ax.set_ylabel("Frecuencia (Número de Observaciones)")
     ax.legend(title="Medidas Centrales", loc="upper left")
     
     # Nota de Fuente
-    fig.text(0.12, 0.01, "Fuente: ERA5-Land, Copernicus Climate Change Service. Procesamiento propio.", fontsize=8, color="gray")
+    fig.text(0.12, 0.02, "Fuente: ERA5-Land, Copernicus Climate Change Service. Procesamiento propio.", fontsize=8, color="gray")
     
-    plt.tight_layout(rect=[0, 0.03, 1, 1])
+    plt.tight_layout(rect=[0, 0.05, 1, 0.95])
     ruta_fig1 = config.FIGURES_DIR / "fig1_histograma_distribucion.png"
     plt.savefig(ruta_fig1, dpi=300)
     plt.close()

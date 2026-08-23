@@ -33,15 +33,14 @@ def main():
             edgecolors="none",
             s=25
         )
-        
-    ax.set_title("Figura 4: Distribución Geográfica de Puntos Observacionales de ERA5-Land por País")
+    ax.set_title("Figura 4: Distribución Geográfica de Puntos Observacionales\nde ERA5-Land por País", pad=15)
     ax.set_xlabel("Longitud (°)")
     ax.set_ylabel("Latitud (°)")
     ax.legend(title="País", loc="lower left")
     
-    fig.text(0.12, 0.01, "Fuente: ERA5-Land, Copernicus Climate Change Service. Promedios 2020–2025 por coordenada.", fontsize=8, color="gray")
+    fig.text(0.12, 0.02, "Fuente: ERA5-Land, Copernicus Climate Change Service. Promedios 2020–2025 por coordenada.", fontsize=8, color="gray")
     
-    plt.tight_layout(rect=[0, 0.03, 1, 1])
+    plt.tight_layout(rect=[0, 0.05, 1, 0.95])
     ruta_fig4 = config.FIGURES_DIR / "fig4_dispersion_geografica.png"
     plt.savefig(ruta_fig4, dpi=300)
     plt.close()
@@ -90,7 +89,7 @@ def main():
     ct_beaufort.round(2).to_csv(ruta_beaufort)
     print(f"\n[Actividad 10] Clasificación Beaufort guardada en: {ruta_beaufort}")
     
-    fig, ax = plt.subplots(figsize=(11, 6))
+    fig, ax = plt.subplots(figsize=(11, 6.5))
     
     ct_beaufort.plot(
         kind="bar",
@@ -101,15 +100,15 @@ def main():
         linewidth=0.5
     )
     
-    ax.set_title("Figura 5: Distribución Proporcional (100%) de la Velocidad del Viento según Escala Beaufort")
+    ax.set_title("Figura 5: Distribución Proporcional (100%) de la Velocidad del Viento\nsegún Escala Beaufort por País", pad=15)
     ax.set_xlabel("País")
     ax.set_ylabel("Porcentaje (%)")
     ax.legend(title="Categoría Beaufort", bbox_to_anchor=(1.02, 1), loc="upper left")
     plt.xticks(rotation=0)
     
-    fig.text(0.12, 0.01, "Fuente: ERA5-Land, Copernicus Climate Change Service. Clasificación según Escala Beaufort en m/s.", fontsize=8, color="gray")
+    fig.text(0.12, 0.02, "Fuente: ERA5-Land, Copernicus Climate Change Service. Clasificación según Escala Beaufort en m/s.", fontsize=8, color="gray")
     
-    plt.tight_layout(rect=[0, 0.03, 1, 1])
+    plt.tight_layout(rect=[0, 0.05, 1, 0.95])
     ruta_fig5 = config.FIGURES_DIR / "fig5_beaufort_apiladas.png"
     plt.savefig(ruta_fig5, dpi=300)
     plt.close()
@@ -118,7 +117,7 @@ def main():
     # --------------------------------------------------------------------------
     # ACTIVIDAD 12 & FIGURA OBLIGATORIA 6: Mapa Climático Regional
     # --------------------------------------------------------------------------
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots(figsize=(11, 7.5))
     
     scatter = ax.scatter(
         df_coords["longitude"],
@@ -133,13 +132,13 @@ def main():
     cbar = plt.colorbar(scatter, ax=ax, shrink=0.7)
     cbar.set_label("Temperatura Promedio (°C)")
     
-    ax.set_title("Figura 6: Mapa Climático Regional – Temperatura Promedio 2020–2025 en Centroamérica")
+    ax.set_title("Figura 6: Mapa Climático Regional – Temperatura Promedio 2020–2025\nen Centroamérica", pad=15)
     ax.set_xlabel("Longitud (°)")
     ax.set_ylabel("Latitud (°)")
     
-    fig.text(0.12, 0.01, "Fuente: ERA5-Land, Copernicus Climate Change Service. Promedio multianual 2020–2025 por coordenada.", fontsize=8, color="gray")
+    fig.text(0.12, 0.02, "Fuente: ERA5-Land, Copernicus Climate Change Service. Promedio multianual 2020–2025 por coordenada.", fontsize=8, color="gray")
     
-    plt.tight_layout(rect=[0, 0.03, 1, 1])
+    plt.tight_layout(rect=[0, 0.05, 1, 0.95])
     ruta_fig6 = config.FIGURES_DIR / "fig6_mapa_climatico.png"
     plt.savefig(ruta_fig6, dpi=300)
     plt.close()

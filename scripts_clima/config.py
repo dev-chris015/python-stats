@@ -77,13 +77,14 @@ PAIS_COLORS = {
 
 def apply_custom_style():
     """Aplica configuraciones visuales profesionales a Matplotlib y Seaborn."""
+    # pyrefly: ignore [missing-import]
     import matplotlib.pyplot as plt
     import seaborn as sns
     
     sns.set_theme(style="whitegrid", palette="muted")
-    plt.rcParams["figure.figsize"] = (10, 6)
+    plt.rcParams["figure.figsize"] = (11, 6.5)
     plt.rcParams["figure.dpi"] = 300
-    plt.rcParams["axes.titlesize"] = 13
+    plt.rcParams["axes.titlesize"] = 12
     plt.rcParams["axes.titleweight"] = "bold"
     plt.rcParams["axes.labelsize"] = 11
     plt.rcParams["xtick.labelsize"] = 10
