@@ -1,0 +1,6 @@
+Variable,Media,Mediana,Desv_Estandar,Q1,Q3,IQR,Minimo,Maximo
+temperatura_c,23.96,24.51,3.04,22.46,25.95,3.49,6.82,34.3
+precipitacion_mensual_mm,160.19,112.99,151.6,44.37,238.44,194.06,0.02,1689.63
+humedad_suelo,0.35,0.38,0.11,0.29,0.42,0.13,0.01,0.6
+radiacion_mj_m2_dia,14.6,16.08,6.2,7.41,19.5,12.09,2.59,26.62
+velocidad_viento_ms,1.23,0.92,1.11,0.48,1.62,1.14,0.0,10.4

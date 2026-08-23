@@ -1,0 +1,6 @@
+Variable,Limite_Inferior_IQR,Limite_Superior_IQR,Cantidad_Atipicos,Porcentaje_Atipicos
+temperatura_c,17.22,31.19,11602,3.81
+precipitacion_mensual_mm,-246.72,529.53,8102,2.66
+humedad_suelo,0.09,0.62,4266,1.4
+radiacion_mj_m2_dia,-10.73,37.64,0,0.0
+velocidad_viento_ms,-1.23,3.32,15671,5.15

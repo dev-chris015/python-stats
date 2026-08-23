@@ -1,0 +1,9 @@
+Métrica / Aspecto,Valor / Descripción
+Periodo de estudio,Enero 2020 – Diciembre 2025 (72 meses)
+Unidad de observación,"Combinación de punto geográfico (latitud, longitud), país y mes"
+Filas iniciales,"304,272"
+Filas finales (tras limpieza),"304,272"
+Columnas totales,13
+Registros duplicados,0
+Total valores faltantes (global),0 (0.00%)
+Regla de exclusión aplicada,No se requirió exclusión ni imputación (0% faltantes < 2%)
