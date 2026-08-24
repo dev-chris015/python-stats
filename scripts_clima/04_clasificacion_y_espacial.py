@@ -14,9 +14,7 @@ def main():
     # 1. Cargar dataset
     df = pd.read_csv(config.CLIMA_CSV_PATH)
     
-    # --------------------------------------------------------------------------
-    # ACTIVIDAD 8 & FIGURA OBLIGATORIA 4: Diagrama de Dispersión Geográfico
-    # --------------------------------------------------------------------------
+    # Diagrama de Dispersión Geográfico
     # Promediar 2020-2025 por punto geográfico (lat, lon, pais)
     df_coords = df.groupby(["pais", "latitude", "longitude"])[["temperatura_c", "precipitacion_mensual_mm"]].mean().reset_index()
     
@@ -46,9 +44,7 @@ def main():
     plt.close()
     print(f"[Actividad 8 & Fig 4] Guardada en: {ruta_fig4}")
     
-    # --------------------------------------------------------------------------
-    # ACTIVIDAD 9: Categorización por Cuartiles Regionales
-    # --------------------------------------------------------------------------
+    # Actividad 9: Categorización por Cuartiles Regionales
     # Cuartiles regionales globales de Temperatura y Precipitación
     q1_t, q2_t, q3_t = df["temperatura_c"].quantile([0.25, 0.50, 0.75])
     q1_p, q2_p, q3_p = df["precipitacion_mensual_mm"].quantile([0.25, 0.50, 0.75])
@@ -66,34 +62,27 @@ def main():
     df["cat_temperatura"] = df["temperatura_c"].apply(lambda x: cat_cuartiles(x, q1_t, q2_t, q3_t))
     df["cat_precipitacion"] = df["precipitacion_mensual_mm"].apply(lambda x: cat_cuartiles(x, q1_p, q2_p, q3_p))
     
-    # Reordenar columnas para mantener orden lógico: Relativamente Baja, Media-Baja, Media-Alta, Alta
     orden_cat = ["Relativamente Baja", "Media-Baja", "Media-Alta", "Alta"]
     
-    # Tabla de frecuencias por país para temperatura
     freq_temp = pd.crosstab(df["pais"], df["cat_temperatura"], normalize="index") * 100
     freq_temp = freq_temp.reindex(columns=orden_cat).round(2)
     freq_temp.insert(0, "Variable", "temperatura_c")
 
-    # Tabla de frecuencias por país para precipitación
     freq_precip = pd.crosstab(df["pais"], df["cat_precipitacion"], normalize="index") * 100
     freq_precip = freq_precip.reindex(columns=orden_cat).round(2)
     freq_precip.insert(0, "Variable", "precipitacion_mensual_mm")
 
-    # Unir ambas tablas en un único archivo consolidado
     freq_combinada = pd.concat([freq_temp, freq_precip]).reset_index()
     ruta_cuartiles_comb = config.OUTPUT_DIR / "actividad_9_cuartiles_regional_pais.csv"
     freq_combinada.to_csv(ruta_cuartiles_comb, index=False)
     print(f"\n[Actividad 9] Tabla consolidada de cuartiles por país guardada en: {ruta_cuartiles_comb}")
     print(freq_combinada)
     
-    # --------------------------------------------------------------------------
-    # ACTIVIDAD 10 & FIGURA OBLIGATORIA 5: Escala Beaufort y Barras Apiladas (100%)
-    # --------------------------------------------------------------------------
+    # Actividad 10 & Figura Obligatoria 5: Escala Beaufort y Barras Apiladas (100%)
     df["categoria_beaufort"] = df["velocidad_viento_ms"].apply(config.clasificar_beaufort)
     
     orden_beaufort = ["Calma", "Ventolina", "Brisa ligera", "Brisa suave", "Brisa moderada", "Brisa fresca", "Brisa fuerte"]
     
-    # Cruzar con país (frecuencia relativa 100%)
     ct_beaufort = pd.crosstab(df["pais"], df["categoria_beaufort"], normalize="index") * 100
     columnas_presentes = [c for c in orden_beaufort if c in ct_beaufort.columns]
     ct_beaufort = ct_beaufort[columnas_presentes]
@@ -127,9 +116,7 @@ def main():
     plt.close()
     print(f"[Figura Obligatoria 5] Guardada en: {ruta_fig5}")
     
-    # --------------------------------------------------------------------------
-    # ACTIVIDAD 12 & FIGURA OBLIGATORIA 6: Mapa Climático Regional
-    # --------------------------------------------------------------------------
+    # Actividad 12 & Figura Obligatoria 6: Mapa Climático Regional
     fig, ax = plt.subplots(figsize=(11, 7.5))
     
     scatter = ax.scatter(

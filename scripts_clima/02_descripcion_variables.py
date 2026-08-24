@@ -21,9 +21,7 @@ def main():
         "velocidad_viento_ms"
     ]
     
-    # --------------------------------------------------------------------------
-    # ACTIVIDAD 3: Tabla Sintética Descriptiva
-    # --------------------------------------------------------------------------
+    # Actividad 3: Tabla Sintética Descriptiva
     stats_list = []
     for var in variables_climaticas:
         series = df[var]
@@ -49,9 +47,7 @@ def main():
     print(f"[Actividad 3] Tabla sintética guardada en: {ruta_sintetica}")
     print(df_sintetica.to_string(index=False))
     
-    # --------------------------------------------------------------------------
-    # ACTIVIDAD 5: Identificación de Atípicos (IQR)
-    # --------------------------------------------------------------------------
+    # Actividad 5: Identificación de Atípicos (IQR)
     atipicos_list = []
     for var in variables_climaticas:
         series = df[var]
@@ -79,9 +75,7 @@ def main():
     print(f"\n[Actividad 5] Análisis de atípicos guardado en: {ruta_atipicos}")
     print(df_atipicos.to_string(index=False))
     
-    # --------------------------------------------------------------------------
-    # FIGURA OBLIGATORIA 1: Histograma de Distribución
-    # --------------------------------------------------------------------------
+    # Figura Obligatoria 1: Histograma de Distribución
     fig, ax = plt.subplots(figsize=(11, 6.5))
     
     # Histograma con KDE para temperatura

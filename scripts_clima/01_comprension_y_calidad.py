@@ -11,9 +11,7 @@ def main():
     n_rows, k_cols = df.shape
     print(f"Dataset cargado correctamente: {n_rows:,} observaciones x {k_cols} columnas.")
     
-    # --------------------------------------------------------------------------
-    # ACTIVIDAD 1: Unidad de Observación y Tabla de Frecuencias por País
-    # --------------------------------------------------------------------------
+    # Actividad 1: Unidad de Observación y Tabla de Frecuencias por País
     freq_abs = df["pais"].value_counts()
     freq_rel = df["pais"].value_counts(normalize=True) * 100
     
@@ -23,19 +21,16 @@ def main():
         "Frecuencia_Relativa_fi_pct": freq_rel.values.round(2)
     })
     
-    # Conteo de puntos geográficos únicos (lat, lon) por país
+    # Conteo de puntos geográficos únicos por país
     puntos_unicos = df[["pais", "latitude", "longitude"]].drop_duplicates().groupby("pais").size()
     df_frecuencias["Puntos_Geograficos_Unicos"] = df_frecuencias["Pais"].map(puntos_unicos)
     
-    # Guardar tabla de frecuencias en output/
     ruta_frecuencias = config.OUTPUT_DIR / "actividad_1_frecuencias_pais.csv"
     df_frecuencias.to_csv(ruta_frecuencias, index=False)
     print(f"[Actividad 1] Tabla de frecuencias guardada en: {ruta_frecuencias}")
     print(df_frecuencias.to_string(index=False))
     
-    # --------------------------------------------------------------------------
-    # ACTIVIDAD 2: Ficha Metodológica y Calidad de Datos
-    # --------------------------------------------------------------------------
+    # Actividad 2: Ficha Metodológica y Calidad de Datos
     missing_series = df.isna().sum()
     pct_missing = (missing_series / n_rows) * 100
     

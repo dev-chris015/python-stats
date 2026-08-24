@@ -13,9 +13,7 @@ def main():
     # 1. Cargar dataset
     df = pd.read_csv(config.CLIMA_CSV_PATH)
     
-    # --------------------------------------------------------------------------
-    # ACTIVIDAD 6: Tabla Comparativa entre Países
-    # --------------------------------------------------------------------------
+    #Tabla Comparativa entre Países
     df_pais_comp = df.groupby("pais").agg(
         Temp_Media_C=("temperatura_c", "mean"),
         Temp_Mediana_C=("temperatura_c", "median"),
@@ -30,15 +28,15 @@ def main():
     print(f"[Actividad 6] Tabla comparativa por país guardada en: {ruta_comp_pais}")
     print(df_pais_comp.to_string(index=False))
     
-    # --------------------------------------------------------------------------
-    # FIGURA OBLIGATORIA 2: Diagrama de Cajas de Precipitación Mensual por País
-    # --------------------------------------------------------------------------
+    # Figura Obligatoria 2: Diagrama de Cajas de Precipitación Mensual por País
     fig, ax = plt.subplots(figsize=(11, 6))
     
     sns.boxplot(
         data=df,
         x="pais",
         y="precipitacion_mensual_mm",
+        hue="pais",
+        legend=False,
         palette=config.PAIS_COLORS,
         ax=ax,
         fliersize=1.5,
@@ -57,9 +55,7 @@ def main():
     plt.close()
     print(f"\n[Figura Obligatoria 2] Guardada en: {ruta_fig2}")
     
-    # --------------------------------------------------------------------------
-    # ACTIVIDAD 7 & FIGURA OBLIGATORIA 3: Figura Temporal de Dos Paneles
-    # --------------------------------------------------------------------------
+    # Actividad 7 & Figura Obligatoria 3: Figura Temporal de Dos Paneles
     # Panel A: Promedio mensual por coordenada -> agregar país y año
     df_panel_a = df.groupby(["pais", "latitude", "longitude", "anio"])["temperatura_c"].mean().reset_index()
     df_panel_a = df_panel_a.groupby(["pais", "anio"])["temperatura_c"].mean().reset_index()
