@@ -66,12 +66,25 @@ def main():
     df["cat_temperatura"] = df["temperatura_c"].apply(lambda x: cat_cuartiles(x, q1_t, q2_t, q3_t))
     df["cat_precipitacion"] = df["precipitacion_mensual_mm"].apply(lambda x: cat_cuartiles(x, q1_p, q2_p, q3_p))
     
+    # Reordenar columnas para mantener orden lógico: Relativamente Baja, Media-Baja, Media-Alta, Alta
+    orden_cat = ["Relativamente Baja", "Media-Baja", "Media-Alta", "Alta"]
+    
     # Tabla de frecuencias por país para temperatura
     freq_temp = pd.crosstab(df["pais"], df["cat_temperatura"], normalize="index") * 100
-    ruta_cuartiles = config.OUTPUT_DIR / "actividad_9_cuartiles_temperatura_pais.csv"
-    freq_temp.round(2).to_csv(ruta_cuartiles)
-    print(f"\n[Actividad 9] Tabla de cuartiles por país guardada en: {ruta_cuartiles}")
-    print(freq_temp.round(2))
+    freq_temp = freq_temp.reindex(columns=orden_cat).round(2)
+    freq_temp.insert(0, "Variable", "temperatura_c")
+
+    # Tabla de frecuencias por país para precipitación
+    freq_precip = pd.crosstab(df["pais"], df["cat_precipitacion"], normalize="index") * 100
+    freq_precip = freq_precip.reindex(columns=orden_cat).round(2)
+    freq_precip.insert(0, "Variable", "precipitacion_mensual_mm")
+
+    # Unir ambas tablas en un único archivo consolidado
+    freq_combinada = pd.concat([freq_temp, freq_precip]).reset_index()
+    ruta_cuartiles_comb = config.OUTPUT_DIR / "actividad_9_cuartiles_regional_pais.csv"
+    freq_combinada.to_csv(ruta_cuartiles_comb, index=False)
+    print(f"\n[Actividad 9] Tabla consolidada de cuartiles por país guardada en: {ruta_cuartiles_comb}")
+    print(freq_combinada)
     
     # --------------------------------------------------------------------------
     # ACTIVIDAD 10 & FIGURA OBLIGATORIA 5: Escala Beaufort y Barras Apiladas (100%)
