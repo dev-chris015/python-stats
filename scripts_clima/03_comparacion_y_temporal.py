@@ -29,7 +29,7 @@ def main():
     print(df_pais_comp.to_string(index=False))
     
     # Figura Obligatoria 2: Diagrama de Cajas de Precipitación Mensual por País
-    fig, ax = plt.subplots(figsize=(11, 6))
+    fig, ax = plt.subplots(figsize=(11, 6.5))
     
     sns.boxplot(
         data=df,
@@ -39,19 +39,27 @@ def main():
         legend=False,
         palette=config.PAIS_COLORS,
         ax=ax,
+        showmeans=True,
+        meanprops={"marker": "D", "markerfacecolor": "red", "markeredgecolor": "black", "markersize": 6},
         fliersize=1.5,
         linewidth=1
     )
     
-    ax.set_title("Figura 2: Distribución de la Precipitación Mensual por País en Centroamérica (2020–2025)")
+    # Leyenda para el marcador de la media
+    ax.plot([], [], marker="D", color="red", markeredgecolor="black", linestyle="None", label="Media Aritmética")
+    ax.legend(loc="upper right", fontsize=9)
+    
+    ax.set_title("Figura 2: Distribución de la Precipitación Mensual por País en Centroamérica (2020–2025)", pad=15)
     ax.set_xlabel("País")
     ax.set_ylabel("Precipitación Mensual (mm)")
+    ax.set_ylim(-20, 1750)
     
-    fig.text(0.12, 0.01, "Fuente: ERA5-Land, Copernicus Climate Change Service. Procesamiento propio. Muestra promedios no ponderados.", fontsize=8, color="gray")
+    # Explicación de la fuente y no-ponderación
+    fig.text(0.08, 0.015, "Fuente: ERA5-Land, Copernicus Climate Change Service. Procesamiento propio.\nNota: Los promedios nacionales son aritméticos simples de los puntos del grid y no están ponderados por superficie.", fontsize=8, color="gray")
     
-    plt.tight_layout(rect=[0, 0.03, 1, 1])
+    plt.tight_layout(rect=[0, 0.04, 1, 0.96])
     ruta_fig2 = config.FIGURES_DIR / "fig2_boxplot_precipitacion.png"
-    plt.savefig(ruta_fig2, dpi=300)
+    plt.savefig(ruta_fig2, dpi=300, bbox_inches="tight")
     plt.close()
     print(f"\n[Figura Obligatoria 2] Guardada en: {ruta_fig2}")
     
@@ -61,47 +69,49 @@ def main():
     df_panel_a = df_panel_a.groupby(["pais", "anio"])["temperatura_c"].mean().reset_index()
     
     # Panel B: Perfil estacional (Enero a Diciembre)
-    # Asegurar orden del mes
-    meses_orden = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
-                   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-    
     df_panel_b = df.groupby(["pais", "numero_mes", "mes"])["precipitacion_mensual_mm"].mean().reset_index()
     df_panel_b.sort_values(by="numero_mes", inplace=True)
     
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6.5))
     
     # Graficar Panel A
     for pais, color in config.PAIS_COLORS.items():
         sub_a = df_panel_a[df_panel_a["pais"] == pais]
-        ax1.plot(sub_a["anio"], sub_a["temperatura_c"], marker="o", linewidth=2, label=pais, color=color)
+        ax1.plot(sub_a["anio"], sub_a["temperatura_c"], marker="o", linewidth=2.2, label=pais, color=color)
         
-    ax1.set_title("Panel A: Evolución de la Temperatura Anual por País (2020–2025)")
+    ax1.set_title("Panel A: Evolución de la Temperatura Anual por País (2020–2025)", fontsize=11, fontweight="bold")
     ax1.set_xlabel("Año")
     ax1.set_ylabel("Temperatura Media Anual (°C)")
-    ax1.grid(True, linestyle="--", alpha=0.5)
-    ax1.legend(loc="upper left", fontsize=8)
+    ax1.set_ylim(21.5, 27.5)
+    ax1.grid(True, linestyle="--", alpha=0.4)
+    ax1.legend(loc="upper left", fontsize=8.5, framealpha=0.9)
     
     # Graficar Panel B
     for pais, color in config.PAIS_COLORS.items():
         sub_b = df_panel_b[df_panel_b["pais"] == pais]
-        ax2.plot(sub_b["numero_mes"], sub_b["precipitacion_mensual_mm"], marker="s", linewidth=2, label=pais, color=color)
+        ax2.plot(sub_b["numero_mes"], sub_b["precipitacion_mensual_mm"], marker="s", linewidth=2.2, label=pais, color=color)
         
-    ax2.set_title("Panel B: Perfil Estacional Promedio de Precipitación (2020–2025)")
+    ax2.set_title("Panel B: Perfil Estacional Promedio de Precipitación (2020–2025)", fontsize=11, fontweight="bold")
     ax2.set_xlabel("Mes del Calendario")
     ax2.set_ylabel("Precipitación Mensual Promedio (mm)")
     ax2.set_xticks(range(1, 13))
     ax2.set_xticklabels(["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"])
-    ax2.grid(True, linestyle="--", alpha=0.5)
-    ax2.legend(loc="upper left", fontsize=8)
+    ax2.grid(True, linestyle="--", alpha=0.4)
+    ax2.legend(loc="upper left", fontsize=8.5, framealpha=0.9)
     
-    fig.suptitle("Figura 3: Análisis Temporal y Estacional del Clima en Centroamérica", fontsize=14, fontweight="bold")
-    fig.text(0.08, 0.01, "Fuente: ERA5-Land, Copernicus Climate Change Service. Procesamiento propio.", fontsize=8, color="gray")
+    # Anotación estacional en Panel B
+    ax2.axvspan(6.8, 8.2, color="gray", alpha=0.15, label="Canícula / Veranillo")
+    ax2.text(7.5, 340, "Canícula / Veranillo\n(Julio-Agosto)", fontsize=8, color="#555555", ha="center")
     
-    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+    fig.suptitle("Figura 3: Análisis Temporal y Estacional del Clima en Centroamérica (2020–2025)", fontsize=13, fontweight="bold")
+    fig.text(0.06, 0.015, "Fuente: ERA5-Land, Copernicus Climate Change Service. Procesamiento propio.\nNota: Panel A presenta la agregación país-año de la serie. Panel B muestra el perfil mensual multianual.", fontsize=8, color="gray")
+    
+    plt.tight_layout(rect=[0, 0.04, 1, 0.95])
     ruta_fig3 = config.FIGURES_DIR / "fig3_temporal_dos_paneles.png"
-    plt.savefig(ruta_fig3, dpi=300)
+    plt.savefig(ruta_fig3, dpi=300, bbox_inches="tight")
     plt.close()
     print(f"[Figura Obligatoria 3] Guardada en: {ruta_fig3}")
+
 
 if __name__ == "__main__":
     main()
