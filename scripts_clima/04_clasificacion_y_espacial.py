@@ -14,33 +14,35 @@ def main():
     # 1. Cargar dataset
     df = pd.read_csv(config.CLIMA_CSV_PATH)
     
-    # Diagrama de Dispersión Geográfico
+    # Diagrama de Dispersión Climatológico
     # Promediar 2020-2025 por punto geográfico (lat, lon, pais)
     df_coords = df.groupby(["pais", "latitude", "longitude"])[["temperatura_c", "precipitacion_mensual_mm"]].mean().reset_index()
     
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots(figsize=(10, 6))
     
-    for pais, color in config.PAIS_COLORS.items():
-        sub = df_coords[df_coords["pais"] == pais]
-        ax.scatter(
-            sub["longitude"],
-            sub["latitude"],
-            c=color,
-            label=pais,
-            alpha=0.6,
-            edgecolors="none",
-            s=25
-        )
-    ax.set_title("Figura 4: Distribución Geográfica de Puntos Observacionales\nde ERA5-Land por País", pad=15)
-    ax.set_xlabel("Longitud (°)")
-    ax.set_ylabel("Latitud (°)")
-    ax.legend(title="País", loc="lower left")
+    sns.scatterplot(
+        data=df_coords,
+        x="temperatura_c",
+        y="precipitacion_mensual_mm",
+        hue="pais",
+        palette=config.PAIS_COLORS,
+        alpha=0.5,
+        edgecolor="none",
+        s=30,
+        ax=ax
+    )
     
-    fig.text(0.12, 0.02, "Fuente: ERA5-Land, Copernicus Climate Change Service. Promedios 2020–2025 por coordenada.", fontsize=8, color="gray")
+    ax.set_title("Figura 4: Diagrama de Dispersión – Precipitación Promedio vs. Temperatura Promedio\n(Promedios 2020–2025 por Coordenada Geográfica)", pad=15)
+    ax.set_xlabel("Temperatura Promedio (°C)")
+    ax.set_ylabel("Precipitación Promedio (mm)")
+    ax.legend(title="País", bbox_to_anchor=(1.02, 1), loc="upper left")
+    ax.grid(True, linestyle="--", alpha=0.5)
     
-    plt.tight_layout(rect=[0, 0.05, 1, 0.95])
+    fig.text(0.01, 0.01, "Fuente: ERA5-Land, Copernicus Climate Change Service. Promedios 2020–2025 por coordenada.", fontsize=8, color="gray")
+    
+    plt.tight_layout(rect=[0, 0.04, 1, 0.96])
     ruta_fig4 = config.FIGURES_DIR / "fig4_dispersion_geografica.png"
-    plt.savefig(ruta_fig4, dpi=300)
+    plt.savefig(ruta_fig4, dpi=300, bbox_inches="tight")
     plt.close()
     print(f"[Actividad 8 & Fig 4] Guardada en: {ruta_fig4}")
     
@@ -108,11 +110,11 @@ def main():
     ax.legend(title="Categoría Beaufort", bbox_to_anchor=(1.02, 1), loc="upper left")
     plt.xticks(rotation=0)
     
-    fig.text(0.12, 0.02, "Fuente: ERA5-Land, Copernicus Climate Change Service. Clasificación según Escala Beaufort en m/s.", fontsize=8, color="gray")
+    fig.text(0.01, 0.01, "Fuente: ERA5-Land, Copernicus Climate Change Service. Clasificación según Escala Beaufort en m/s.", fontsize=8, color="gray")
     
-    plt.tight_layout(rect=[0, 0.05, 1, 0.95])
+    plt.tight_layout(rect=[0, 0.04, 1, 0.96])
     ruta_fig5 = config.FIGURES_DIR / "fig5_beaufort_apiladas.png"
-    plt.savefig(ruta_fig5, dpi=300)
+    plt.savefig(ruta_fig5, dpi=300, bbox_inches="tight")
     plt.close()
     print(f"[Figura Obligatoria 5] Guardada en: {ruta_fig5}")
     
@@ -136,11 +138,11 @@ def main():
     ax.set_xlabel("Longitud (°)")
     ax.set_ylabel("Latitud (°)")
     
-    fig.text(0.12, 0.02, "Fuente: ERA5-Land, Copernicus Climate Change Service. Promedio multianual 2020–2025 por coordenada.", fontsize=8, color="gray")
+    fig.text(0.01, 0.01, "Fuente: ERA5-Land, Copernicus Climate Change Service. Promedio multianual 2020–2025 por coordenada.", fontsize=8, color="gray")
     
-    plt.tight_layout(rect=[0, 0.05, 1, 0.95])
+    plt.tight_layout(rect=[0, 0.04, 1, 0.96])
     ruta_fig6 = config.FIGURES_DIR / "fig6_mapa_climatico.png"
-    plt.savefig(ruta_fig6, dpi=300)
+    plt.savefig(ruta_fig6, dpi=300, bbox_inches="tight")
     plt.close()
     print(f"[Actividad 12 & Fig 6] Mapa guardado en: {ruta_fig6}")
 
