@@ -5,13 +5,13 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = BASE_DIR.parent
 
-# Archivo de datos de entrada
-CLIMA_CSV_PATH = PROJECT_ROOT / "clima_centro_america.csv"
-
-# Directorios de salidas del paquete scripts_clima
-DATA_DIR = BASE_DIR / "data"
+# Directorios de datos y salidas del paquete scripts_clima
+DATA_DIR = PROJECT_ROOT / "data"
 OUTPUT_DIR = BASE_DIR / "output"
 FIGURES_DIR = BASE_DIR / "figuras"
+
+# Archivo de datos de entrada
+CLIMA_CSV_PATH = DATA_DIR / "clima_centro_america.csv"
 
 # Asegurar la existencia de los directorios
 for directory in [DATA_DIR, OUTPUT_DIR, FIGURES_DIR]:
