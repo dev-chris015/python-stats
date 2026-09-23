@@ -13,10 +13,10 @@ def run_simulation(max_N=1_000_000, num_tosses=12):
     if max_N not in N_values:
         N_values.append(max_N)
         
-    print(f"Iniciando simulación de Monte Carlo hasta N={max_N:,})...\n")
+    print(f"Iniciando simulación de Monte Carlo hasta N = {max_N:,}...\n")
     
     # Probabilidad teórica de obtener 12 caras o 12 escudos
-    p_12_same = (0.5)**num_tosses
+    p_12_same = (0.5)**num_tosses 
     avg_expected = num_tosses * 0.5
     
     results = {
@@ -27,7 +27,7 @@ def run_simulation(max_N=1_000_000, num_tosses=12):
         'avg_escudos': []
     }
     
-    print("Generando matriz de lanzamientos vectorizada (puede tomar un momento)...")
+    print("Generando matriz de lanzamientos vectorizada")
     # Generar todos los lanzamientos de una vez (memoria eficiente con int8)
     tosses = np.random.randint(0, 2, size=(max_N, num_tosses), dtype=np.int8)
     
