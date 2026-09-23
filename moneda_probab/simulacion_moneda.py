@@ -39,7 +39,7 @@ def run_simulation(max_N=1_000_000, num_tosses=12):
     print("-" * 97)
     
     for n in N_values:
-        # Tomar el subconjunto de simulaciones hasta 'n'
+        # Tomar el subconjunto de simulaciones hasta n
         sub_caras = caras_counts[:n]
         sub_escudos = escudos_counts[:n]
         
@@ -102,7 +102,7 @@ def plot_results(results, p_12_same, avg_expected):
     
     output_path = os.path.join(os.path.dirname(__file__), 'grafico_convergencia.png')
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    print(f"\nGráfico guardado exitosamente en: {output_path}")
+   # print(f"\nGráfico guardado exitosamente en: {output_path}")
 
 if __name__ == '__main__':
     run_simulation(max_N=1_000_000)
