@@ -13,7 +13,7 @@ def run_simulation(max_N=1_000_000, num_tosses=12):
     if max_N not in N_values:
         N_values.append(max_N)
         
-    print(f"Iniciando simulación de Monte Carlo (hasta N={max_N:,})...\n")
+    print(f"Iniciando simulación de Monte Carlo hasta N={max_N:,})...\n")
     
     # Probabilidad teórica de obtener 12 caras o 12 escudos
     p_12_same = (0.5)**num_tosses
@@ -35,7 +35,7 @@ def run_simulation(max_N=1_000_000, num_tosses=12):
     caras_counts = np.sum(tosses, axis=1)
     escudos_counts = num_tosses - caras_counts
     
-    print("\n| N          | P(12 Caras) | Error Abs  | P(12 Escud) | Error Abs  | Prom Caras | Prom Escud |")
+    print("\n| N          | P-12 Caras | Error Abs  | P-12 Escudos | Error Abs  | Prom Caras | Prom Escudos |")
     print("-" * 97)
     
     for n in N_values:
@@ -66,7 +66,7 @@ def run_simulation(max_N=1_000_000, num_tosses=12):
         print(f"| {n:<10,} | {prob_12_caras:.6f}    | {err_c:.6f}   | {prob_12_escudos:.6f}    | {err_e:.6f}   | {avg_caras_val:.4f}     | {avg_escudos_val:.4f}     |")
 
     print("-" * 97)
-    print(f"Valor Teórico (12 Iguales) = {p_12_same:.6f}")
+    print(f"Valor Teórico para 12 intentos seguidos iguales = {p_12_same:.6f}")
     print(f"Valor Teórico Promedio     = {avg_expected:.4f}")
     
     plot_results(results, p_12_same, avg_expected)
@@ -77,8 +77,8 @@ def plot_results(results, p_12_same, avg_expected):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
     
     # Subplot 1: Probabilidad de 12 seguidos
-    ax1.plot(N_vals, results['p_12_caras'], marker='o', label='Simulación (12 Caras)', color='royalblue')
-    ax1.plot(N_vals, results['p_12_escudos'], marker='s', label='Simulación (12 Escudos)', color='forestgreen')
+    ax1.plot(N_vals, results['p_12_caras'], marker='o', label='Simulación 12 Caras', color='royalblue')
+    ax1.plot(N_vals, results['p_12_escudos'], marker='s', label='Simulación 12 Escudos', color='forestgreen')
     ax1.axhline(y=p_12_same, color='crimson', linestyle='--', label=f'Teórico ({p_12_same:.6f})')
     ax1.set_xscale('log')
     ax1.set_xlabel('Número de Experimentos (N) - Escala Log')
@@ -93,7 +93,7 @@ def plot_results(results, p_12_same, avg_expected):
     ax2.axhline(y=avg_expected, color='crimson', linestyle='--', label=f'Teórico ({avg_expected:.1f})')
     ax2.set_xscale('log')
     ax2.set_xlabel('Número de Experimentos (N) - Escala Log')
-    ax2.set_ylabel('Promedio por Experimento (de 12)')
+    ax2.set_ylabel('Promedio por Experimento de 12')
     ax2.set_title('Convergencia: Promedio de Lanzamientos')
     ax2.legend()
     ax2.grid(True, which="both", ls="--", alpha=0.6)
