@@ -109,7 +109,6 @@ def get_user_N(default_N=1_000_000):
             print(f"Usando valor por defecto: {default_N:,} experimentos.\n")
             return default_N
         
-        # Soportar formatos como 1_000_000 o 1e6
         val = int(float(user_input.replace('_', '')))
         if val <= 0:
             print(f"El número debe ser mayor a 0, usaremos valor por defecto: {default_N:,} experimentos.\n")
