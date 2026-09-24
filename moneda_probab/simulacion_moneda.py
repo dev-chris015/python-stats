@@ -3,11 +3,7 @@ import matplotlib.pyplot as plt
 import os
 
 def run_simulation(max_N=1_000_000, num_tosses=12):
-    """
-    Simula el lanzamiento de una moneda 'num_tosses' veces por experimento.
-    Realiza esto para diferentes tamaños de muestra (N) hasta 'max_N'.
-    1 = Cara, 0 = Escudo
-    """
+    # Simulacion de Monte Carlo para la probabilidad de obtener 12 caras o 12 escudos
     # Escala logarítmica para ver la convergencia
     N_values = [10**i for i in range(1, int(np.log10(max_N)) + 1)]
     if max_N not in N_values:
@@ -104,5 +100,28 @@ def plot_results(results, p_12_same, avg_expected):
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
    # print(f"\nGráfico guardado exitosamente en: {output_path}")
 
+def get_user_N(default_N=1_000_000):
+
+    prompt = f"Ingrese el número máximo de experimentos, ENTER para valor por defecto {default_N:,}: "
+    try:
+        user_input = input(prompt).strip()
+        if not user_input:
+            print(f"Usando valor por defecto: {default_N:,} experimentos.\n")
+            return default_N
+        
+        # Soportar formatos como 1_000_000 o 1e6
+        val = int(float(user_input.replace('_', '')))
+        if val <= 0:
+            print(f"El número debe ser mayor a 0, usaremos valor por defecto: {default_N:,} experimentos.\n")
+            return default_N
+        
+        print(f" Experimentos configurados en: {val:,}\n")
+        return val
+    except (ValueError, OverflowError):
+        print(f" Entrada no válida, usaremos valor por defecto: {default_N:,} experimentos.\n")
+        return default_N
+
 if __name__ == '__main__':
-    run_simulation(max_N=1_000_000)
+    max_N = get_user_N(default_N=1_000_000)
+    run_simulation(max_N=max_N, num_tosses=12)
+
