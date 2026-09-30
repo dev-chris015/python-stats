@@ -1,126 +1,124 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import time
+import math
 
 def run_simulation(max_N=1_000_000, num_tosses=12):
-    # Simulacion de Monte Carlo para la probabilidad de obtener 12 caras o 12 escudos
-    # Escala logarítmica para ver la convergencia
-    N_values = [10**i for i in range(1, int(np.log10(max_N)) + 1)]
-    if max_N not in N_values:
-        N_values.append(max_N)
-        
-    print(f"Iniciando simulación de Monte Carlo hasta N = {max_N:,}...\n")
+    print(f"\nIniciando simulación de Monte Carlo con N = {max_N:,} experimentos...\n")
     
-    # Probabilidad teórica de obtener 12 caras o 12 escudos
-    p_12_same = (0.5)**num_tosses 
-    avg_expected = num_tosses * 0.5
+    # Procesamiento por bloques para mostrar progreso
+    chunk_size = min(max_N, max(1, max_N // 50))
+    caras_counts = np.zeros(max_N, dtype=np.int8)
     
-    results = {
-        'N': [],
-        'p_12_caras': [],
-        'p_12_escudos': [],
-        'avg_caras': [],
-        'avg_escudos': []
-    }
+    print("Simulando los lanzamientos...")
+    for i in range(0, max_N, chunk_size):
+        end = min(i + chunk_size, max_N)
+        size = end - i
+        
+        # Generar lanzamientos aleatorios para el bloque
+        chunk_tosses = np.random.randint(0, 2, size=(size, num_tosses), dtype=np.int8)
+        caras_counts[i:end] = np.sum(chunk_tosses, axis=1)
+        
+        # Barra de progreso en consola
+        progress = int((end / max_N) * 50)
+        bar = '█' * progress + '-' * (50 - progress)
+        print(f"\r[{bar}] {end:,}/{max_N:,} experimentos ({int(end/max_N*100)}%)", end="", flush=True)
+        time.sleep(0.02)  # Pequeña pausa para hacer visible el progreso
+        
+    print("\n\n¡Simulación completada con éxito!\n")
     
-    print("Generando matriz de lanzamientos vectorizada")
-    # Generar todos los lanzamientos de una vez (memoria eficiente con int8)
-    tosses = np.random.randint(0, 2, size=(max_N, num_tosses), dtype=np.int8)
+    # Mostrar resultados básicos
+    count_12_caras = np.sum(caras_counts == num_tosses)
+    count_12_escudos = np.sum(caras_counts == 0)
     
-    # Calcular sumas por experimento (1s = caras)
-    caras_counts = np.sum(tosses, axis=1)
-    escudos_counts = num_tosses - caras_counts
+    prob_12_caras = count_12_caras / max_N
+    prob_12_escudos = count_12_escudos / max_N
+    p_teorica = (0.5)**num_tosses
     
-    print("\n| N          | P-12 Caras | Error Abs  | P-12 Escudos | Error Abs  | Prom Caras | Prom Escudos |")
-    print("-" * 97)
+    print("-" * 50)
+    print("RESULTADOS DE LA SIMULACIÓN:")
+    print("-" * 50)
+    print(f"Probabilidad de 12 caras   : {prob_12_caras:.6f} (Teórico: {p_teorica:.6f})")
+    print(f"Probabilidad de 12 escudos : {prob_12_escudos:.6f} (Teórico: {p_teorica:.6f})")
+    print(f"Promedio de caras por exp  : {np.mean(caras_counts):.4f} (Teórico: {num_tosses/2:.4f})")
+    print("-" * 50)
     
-    for n in N_values:
-        # Tomar el subconjunto de simulaciones hasta n
-        sub_caras = caras_counts[:n]
-        sub_escudos = escudos_counts[:n]
-        
-        # Calcular proporciones de rachas completas
-        count_12_caras = np.sum(sub_caras == num_tosses)
-        prob_12_caras = count_12_caras / n
-        
-        count_12_escudos = np.sum(sub_escudos == num_tosses)
-        prob_12_escudos = count_12_escudos / n
-        
-        # Calcular promedios
-        avg_caras_val = np.mean(sub_caras)
-        avg_escudos_val = np.mean(sub_escudos)
-        
-        results['N'].append(n)
-        results['p_12_caras'].append(prob_12_caras)
-        results['p_12_escudos'].append(prob_12_escudos)
-        results['avg_caras'].append(avg_caras_val)
-        results['avg_escudos'].append(avg_escudos_val)
-        
-        err_c = abs(prob_12_caras - p_12_same)
-        err_e = abs(prob_12_escudos - p_12_same)
-        
-        print(f"| {n:<10,} | {prob_12_caras:.6f}    | {err_c:.6f}   | {prob_12_escudos:.6f}    | {err_e:.6f}   | {avg_caras_val:.4f}     | {avg_escudos_val:.4f}     |")
+    # Generar el nuevo gráfico
+    plot_new_results(caras_counts, num_tosses, max_N)
 
-    print("-" * 97)
-    print(f"Valor Teórico para 12 intentos seguidos iguales = {p_12_same:.6f}")
-    print(f"Valor Teórico Promedio     = {avg_expected:.4f}")
+def plot_new_results(caras_counts, num_tosses, max_N):
+    # Calcular frecuencias simuladas
+    counts = np.bincount(caras_counts, minlength=num_tosses+1)
+    sim_probs = counts / max_N
     
-    plot_results(results, p_12_same, avg_expected)
-
-def plot_results(results, p_12_same, avg_expected):
-    N_vals = results['N']
+    # Calcular probabilidades teóricas (Distribución Binomial)
+    x = np.arange(num_tosses + 1)
+    theo_probs = np.array([math.comb(num_tosses, k) * (0.5**num_tosses) for k in x])
     
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+    # Configurar la figura (gráfico nuevo y diferente)
+    fig, ax = plt.subplots(figsize=(12, 7))
+    fig.patch.set_facecolor('#f8f9fa')
+    ax.set_facecolor('#ffffff')
     
-    # Subplot 1: Probabilidad de 12 seguidos
-    ax1.plot(N_vals, results['p_12_caras'], marker='o', label='Simulación 12 Caras', color='royalblue')
-    ax1.plot(N_vals, results['p_12_escudos'], marker='s', label='Simulación 12 Escudos', color='forestgreen')
-    ax1.axhline(y=p_12_same, color='crimson', linestyle='--', label=f'Teórico ({p_12_same:.6f})')
-    ax1.set_xscale('log')
-    ax1.set_xlabel('Número de Experimentos (N) - Escala Log')
-    ax1.set_ylabel('Probabilidad Estimada')
-    ax1.set_title('Convergencia: Probabilidad de 12 Caras o 12 Escudos')
-    ax1.legend()
-    ax1.grid(True, which="both", ls="--", alpha=0.6)
+    width = 0.35
     
-    # Subplot 2: Promedio en 12 lanzamientos
-    ax2.plot(N_vals, results['avg_caras'], marker='o', label='Promedio Caras', color='royalblue')
-    ax2.plot(N_vals, results['avg_escudos'], marker='s', label='Promedio Escudos', color='forestgreen')
-    ax2.axhline(y=avg_expected, color='crimson', linestyle='--', label=f'Teórico ({avg_expected:.1f})')
-    ax2.set_xscale('log')
-    ax2.set_xlabel('Número de Experimentos (N) - Escala Log')
-    ax2.set_ylabel('Promedio por Experimento de 12')
-    ax2.set_title('Convergencia: Promedio de Lanzamientos')
-    ax2.legend()
-    ax2.grid(True, which="both", ls="--", alpha=0.6)
+    # Barras de simulación
+    rects1 = ax.bar(x - width/2, sim_probs, width, label='Simulación Monte Carlo', 
+                    color='#3b82f6', edgecolor='black', alpha=0.8)
     
+    # Barras teóricas
+    rects2 = ax.bar(x + width/2, theo_probs, width, label='Teórico (Binomial)', 
+                    color='#ef4444', edgecolor='black', alpha=0.8)
+    
+    # Línea de tendencia teórica
+    ax.plot(x, theo_probs, color='#1f2937', marker='o', linestyle='dashed', 
+            linewidth=2, label='Curva Teórica')
+    
+    # Títulos y etiquetas
+    ax.set_xticks(x)
+    ax.set_xlabel(f'Número de Caras obtenidas en {num_tosses} lanzamientos', fontsize=12, fontweight='bold')
+    ax.set_ylabel('Probabilidad de Ocurrencia', fontsize=12, fontweight='bold')
+    ax.set_title('Distribución de Resultados: Simulación vs Teoría Binomial', 
+                 fontsize=14, fontweight='bold', pad=20)
+    ax.legend(fontsize=11)
+    ax.grid(axis='y', linestyle='--', alpha=0.6)
+    
+    # Añadir valores exactos sobre las barras más altas
+    for i in range(len(x)):
+        if sim_probs[i] > 0.05:
+            ax.text(x[i] - width/2, sim_probs[i] + 0.005, f'{sim_probs[i]:.3f}', 
+                    ha='center', va='bottom', fontsize=9, rotation=45)
+            
     plt.tight_layout()
     
-    output_path = os.path.join(os.path.dirname(__file__), 'grafico_convergencia.png')
+    # Guardar la nueva gráfica
+    output_path = os.path.join(os.path.dirname(__file__), 'grafico_distribucion_binomial.png')
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
-   # print(f"\nGráfico guardado exitosamente en: {output_path}")
+    print(f"\n[+] Nuevo gráfico guardado exitosamente en:\n    {output_path}\n")
 
-def get_user_N(default_N=1_000_000):
+def get_user_inputs():
 
-    prompt = f"Ingrese el número máximo de experimentos, ENTER para valor por defecto {default_N:,}: "
+    # Pedir número de experimentos
+    default_N = 1_000_000
+    prompt_N = f"Ingrese el número de experimentos, se definen 1,000,000 por defecto: "
     try:
-        user_input = input(prompt).strip()
+        user_input = input(prompt_N).strip()
         if not user_input:
-            print(f"Usando valor por defecto: {default_N:,} experimentos.\n")
-            return default_N
-        
-        val = int(float(user_input.replace('_', '')))
-        if val <= 0:
-            print(f"El número debe ser mayor a 0, usaremos valor por defecto: {default_N:,} experimentos.\n")
-            return default_N
-        
-        print(f" Experimentos configurados en: {val:,}\n")
-        return val
+            max_N = default_N
+        else:
+            max_N = int(float(user_input.replace('_', '')))
+            if max_N <= 0:
+                print("Valor inválido. Usando por defecto.")
+                max_N = default_N
     except (ValueError, OverflowError):
-        print(f" Entrada no válida, usaremos valor por defecto: {default_N:,} experimentos.\n")
-        return default_N
+        print("Entrada no válida, usaremos valor por defecto.")
+        max_N = default_N
+        
+    print(f"-> Experimentos configurados en: {max_N:,}")
+    return max_N
 
 if __name__ == '__main__':
-    max_N = get_user_N(default_N=1_000_000)
+    max_N = get_user_inputs()
     run_simulation(max_N=max_N, num_tosses=12)
 
